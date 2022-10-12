@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="myApp">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora AJAX</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <!-- Bootstrap JS -->
+    <script
+      async
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"
+    ></script>
+    <!-- FontAwesome -->
+    <script
+      async
+      src="https://kit.fontawesome.com/f4b99e5e94.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- ANGULAR JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <!-- AJAX SCRIPT -->
+    <script defer type="module" src="main.js"></script>
+  </head>
+  <body class="bg-light d-flex flex-column min-vh-100" ng-controller="myCtrl">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger shadow">
+      <div class="container-fluid justify-content-around">
+        <a class="navbar-brand" href="#"
+          ><i class="fa-solid fa-calculator p-2"></i> Calculadora AJAX - <b>AngularJS</b></a
+        >
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown-center">
+            <i
+              class="nav-link fas fa-bars"
+              role="button"
+              data-bs-toggle="dropdown"
+            >
+            </i>
+            <ul class="dropdown-menu">
+              <li>
+                <a
+                  ng
+                  id="dropdown-login"
+                  data-bs-toggle="modal"
+                  data-bs-target="#login-modal"
+                  class="dropdown-item"
+                  href="#"
+                  >Login</a
+                >
+              </li>
+              <li>
+                <a
+                  
+                  data-bs-toggle="modal"
+                  data-bs-target="#logout-modal"
+                  class="dropdown-item"
+                  href="#"
+                  >Logout</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container mt-5" >
+      <form>
+        <div class="mb-3">
+          <label for="num1" class="form-label">Número 1</label>
+          <input type="number" class="form-control shadow" id="op1" ng-model="op1"/>
+        </div>
+        <div class="mb-3">
+          <label for="num2" class="form-label">Número 2</label>
+          <input type="number" class="form-control shadow" id="op2" ng-model="op2"/>
+        </div>
+        <div class="mb-5">
+          <label for="operacion" class="form-label">Operación</label>
+          <select class="form-select shadow" id="operacion" ng-model="operacion">
+            <option value="suma">Suma</option>
+            <option value="resta">Resta</option>
+            <option value="multi">Multiplicación</option>
+            <option value="divi">División</option>
+          </select>
+        </div>
+        <div class="form-inline">
+          <button id="calcularBtn" type="button" class="btn btn-danger shadow" ng-click="calcular()">
+            Calcular
+          </button>
+        </div>
+      </form>
+      <div class="mt-4">
+        <h1 class="text-muted fw-bold" id="resultado"></h1>
+      </div>
+    </div>
+    <footer class="bg-light text-center text-muted mt-auto">
+      <div class="p-3">
+        © Elliot Luque Pascual - 2º DAW
+      </div>
+    </footer>
+
+    <!-- Login modal -->
+    <div id="login-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fs-5">Login</h5>
+          </div>
+          <div id="login-modal-body" class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="login" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="login" ng-model="loginInput"/>
+              </div>
+              <div class="mb-3">
+                <label for="pass" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="pass" ng-model="passInput"/>
+              </div>
+              <div class="mb-3">
+                <button id="loginBtn" type="button" class="btn btn-danger" ng-click="login()">
+                  Login
+                </button>
+              </div>
+            </form>
+            <div class="mb-3">
+              <p class="text-danger" id="error-login-msg"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logout modal -->
+    <div id="logout-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title fs-5">Salir?</h5>
+          </div>
+          <div id="login-modal-body" class="modal-body">
+            <form>
+              <div class="mb-3">
+                <p>Seguro que quieres salir?</p>
+              </div>
+              <div class="mb-3">
+                <button id="logoutBtn" type="button" class="btn btn-danger" ng-click="logout()">
+                  Salir
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error toast -->
+    <div
+      id="error-toast"
+      class="toast align-items-center fixed-bottom"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      data-bs-dismiss="toast"
+      style="bottom: 5%; left: 3%; font-size: 1.5rem; user-select: none"
+    >
+      <div class="d-flex">
+        <div class="toast-header">
+          <i class="fa-solid fa-circle-exclamation text-danger"></i>
+        </div>
+        <div id="error-toast-body" class="toast-body d-inline p-3">
+          <!-- Mensaje -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Success toast -->
+    <div
+      id="success-toast"
+      class="toast align-items-center fixed-bottom"
+      role="alert"
+      aria-live="assertive"
+      aria-atomic="true"
+      data-bs-dismiss="toast"
+      style="bottom: 5%; left: 3%; font-size: 1.5rem; user-select: none"
+    >
+      <div class="d-flex">
+        <div class="toast-header">
+          <i class="fa-solid fa-check text-success"></i>
+        </div>
+        <div id="success-toast-body" class="toast-body d-inline p-3">
+          <!-- Mensaje -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
